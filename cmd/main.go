@@ -17,8 +17,16 @@ func healthCheck(context *gin.Context) {
 	context.IndentedJSON(http.StatusOK, health)
 }
 
+func getTest(context *gin.Context) {
+	context.JSON(http.StatusOK, "test")
+}
+
 func main() {
 	router := gin.Default()
+	v1 := router.Group("/v1")
+	{
+		v1.GET("/test", getTest)
+	}
 	router.GET("/health/check", healthCheck)
-	router.Run("localhost:9090")
+	http.ListenAndServe(":9090", router)
 }
